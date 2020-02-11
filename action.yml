@@ -1,0 +1,34 @@
+name: "Update a GCR image based on new file changes"
+description: "Authenticate with gcloud, pull, build, and push image to GCR, taking advantage of previous cached GCR images"
+author: "Nicholas Gronow <nick@wov.io>"
+branding:
+  icon: "arrow-up-circle"
+  color: "green"
+inputs:
+  check_if_changed:
+    description: "Set to false to skip checking if working_directory has changes since the previous commit"
+    required: false
+    default: "true"
+  working_directory:
+    description: "Directory where the Dockerfile is to be found"
+    required: true
+  gcp_service_key:
+    description: "GCP service key with storage and run permissions"
+    required: true
+  project:
+    description: "GCP project"
+    required: true
+  registry:
+    description: "GCP Registry (e.g. 'gcr.io')"
+    required: false
+    default: gcr.io
+  region:
+    description: "GCP region"
+    required: false
+    default: europe-west4
+  env:
+    description: "File path to environment configuration"
+    required: false
+runs:
+  using: "docker"
+  image: "docker://passionkind/github-action-cloud-run:latest"
