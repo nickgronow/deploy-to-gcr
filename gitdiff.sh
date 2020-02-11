@@ -20,7 +20,7 @@ if [ -z "$PREVIOUS_COMMIT" ]; then
 fi
 
 # Check is files in given directory changed between commits
-if [ git diff --name-only HEAD^ HEAD $DIR_PATH ]; then
+if [ "$(git diff --name-only HEAD^ HEAD $DIR_PATH)" ]; then
     echo "Files are changed"
     exit 1
 else
