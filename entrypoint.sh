@@ -1,26 +1,26 @@
 #!/bin/sh
 
 HAS_CHANGED=true
+WORKING_DIR=${INPUT_WORKING_DIRECTORY-.}
 
 if [ "$INPUT_CHECK_IF_CHANGED" ]; then
-    HAS_CHANGED=$(./gitdiff.sh ${INPUT_WORKING_DIRECTORY})
+  HAS_CHANGED=$(gitdiff $WORKING_DIRECTORY)
 fi
 
 if [ $HAS_CHANGED = false ]; then
-    exit 0;
+  echo "Nothing has changed.  Deployment unnecessary"
+  exit 0;
 fi
 
 set -e
 
 BRANCH=$(echo $GITHUB_REF | rev | cut -f 1 -d / | rev)
-LOCAL_IMAGE_NAME=${GITHUB_REPOSITORY}_${INPUT_WORKING_DIRECTORY}:${GITHUB_SHA}
+LOCAL_IMAGE_NAME=${GITHUB_REPOSITORY}_${WORKING_DIRECTORY}:${GITHUB_SHA}
 GCR_IMAGE_NAME=${INPUT_REGISTRY}/${INPUT_PROJECT}/${LOCAL_IMAGE_NAME}
-SERVICE_NAME=${INPUT_SERVICE_NAME}--${BRANCH}
 
 echo "BRANCH = ${BRANCH}"
 echo "LOCAL_IMAGE_NAME = ${LOCAL_IMAGE_NAME}"
 echo "GCR_IMAGE_NAME = ${GCR_IMAGE_NAME}"
-echo "SERVICE_NAME = ${SERVICE_NAME}"
 
 # service key
 
@@ -38,13 +38,10 @@ fi
 
 # run 
 
-echo "\nActivate service account..."
-gcloud auth activate-service-account --key-file="$HOME"/gcloud.json --project "$INPUT_PROJECT"
+echo "Authenticate docker"
+echo $GCR_ACCT | docker login -u _json_key --password-stdin "https://$INPUT_GCR_HOST"
 
-echo "\nConfigure docker..."
-gcloud auth configure-docker --quiet
-
-cd ${GITHUB_WORKSPACE}/${INPUT_WORKING_DIRECTORY}
+cd ${GITHUB_WORKSPACE}/${WORKING_DIRECTORY}
 
 echo "\nBuild image..."
 docker build -t ${LOCAL_IMAGE_NAME} .
@@ -52,11 +49,3 @@ echo "\nTag image..."
 docker tag ${LOCAL_IMAGE_NAME} ${GCR_IMAGE_NAME}
 echo "\nPush image..."
 docker push "$GCR_IMAGE_NAME"
-
-echo "\nDeploy to cloud run..."
-gcloud beta run deploy "$SERVICE_NAME" \
-  --image "$GCR_IMAGE_NAME" \
-  --region "$INPUT_REGION" \
-  --platform managed \
-  --allow-unauthenticated \
-  ${ENV_FLAG}

@@ -13,19 +13,15 @@ In your actions workflow, somewhere after the step that builds
 - name: Deploy service to Cloud Run
   uses: stefda/action-cloud-run@1.0.0
   with:
-    working_directory: [service-api]
-    service_key: ${{ secrets.GCP_CLOUD_RUN_SERVICE_KEY }}
-    project: [your-project]
-    registry: [eu.gcr.io]
-    region: [gcp-region]
-    env: [path-to-env-file]
+    service_key: ${{ secrets.gcp_service_key }}
+    registry: [gcr.io]
+    project: [your-gcp-project-id]
 ```
 
-Your `GCP_CLOUD_RUN_SERVICE_KEY` secret (or whatever you name it) must be a base64 encoded
+Your `gcp_service_key` secret (or whatever you name it) must be a base64 encoded
 gcloud service key with the following permissions:
 
 - Service Account User
-- Cloud Run Admin
 - Storage Admin
 
 The `env` input is optional.
