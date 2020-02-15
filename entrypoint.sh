@@ -1,10 +1,12 @@
 #!/bin/sh
 
-HAS_CHANGED=true
+set -eoux pipefail
+
 WORKING_DIR=${INPUT_WORKING_DIRECTORY-.}
+HAS_CHANGED=true
 
 if [ "$INPUT_CHECK_IF_CHANGED" ]; then
-  HAS_CHANGED=$(gitdiff $WORKING_DIRECTORY)
+  HAS_CHANGED=$(gitdiff $WORKING_DIR)
 fi
 
 if [ $HAS_CHANGED = false ]; then
@@ -12,40 +14,33 @@ if [ $HAS_CHANGED = false ]; then
   exit 0;
 fi
 
-set -e
+REPO_NAME="$($GITHUB_REPOSITORY | sed 's|^.*/||')"
+REGISTRY="${INPUT_REGISTRY-gcr.io}"
+PROJECT="$INPUT_PROJECT"
+NAME="${INPUT_IMAGE_NAME-$REPO_NAME}"
+TAG="$INPUT_IMAGE_TAG"
+SHA="$GITHUB_SHA"
+IMAGE="$REGISTRY/$PROJECT/$NAME"
 
-BRANCH=$(echo $GITHUB_REF | rev | cut -f 1 -d / | rev)
-LOCAL_IMAGE_NAME=${GITHUB_REPOSITORY}_${WORKING_DIRECTORY}:${GITHUB_SHA}
-GCR_IMAGE_NAME=${INPUT_REGISTRY}/${INPUT_PROJECT}/${LOCAL_IMAGE_NAME}
+echo "Full image name: $IMAGE:$TAG"
 
-echo "BRANCH = ${BRANCH}"
-echo "LOCAL_IMAGE_NAME = ${LOCAL_IMAGE_NAME}"
-echo "GCR_IMAGE_NAME = ${GCR_IMAGE_NAME}"
-
-# service key
-
-echo "$INPUT_GCP_SERVICE_KEY" | base64 --decode > "$HOME"/gcloud.json
-
-# Prepare env vars if `env` is set to file 
-
-if [ "$INPUT_ENV" ]; then
-    ENVS=$(cat "$INPUT_ENV" | xargs | sed 's/ /,/g')
-fi
-
-if [ "$ENVS" ]; then
-    ENV_FLAG="--set-env-vars $ENVS"
-fi
-
-# run 
-
+# Login to docker
 echo "Authenticate docker"
-echo $GCR_ACCT | docker login -u _json_key --password-stdin "https://$INPUT_GCR_HOST"
+echo $INPUT_SERVICE_KEY | docker login -u _json_key --password-stdin "https://$REGISTRY"
 
-cd ${GITHUB_WORKSPACE}/${WORKING_DIRECTORY}
+# Pull image
+echo "Pull image..."
+docker pull "$IMAGE:$TAG"
 
-echo "\nBuild image..."
-docker build -t ${LOCAL_IMAGE_NAME} .
-echo "\nTag image..."
-docker tag ${LOCAL_IMAGE_NAME} ${GCR_IMAGE_NAME}
-echo "\nPush image..."
-docker push "$GCR_IMAGE_NAME"
+# Build image
+echo "Build image..."
+docker build \
+  -t "$IMAGE:$TAG" \
+  -t "$IMAGE:$SHA" \
+  --cache-from "$IMAGE:$TAG" \
+  --build-arg commit="$GITHUB_SHA" \
+  "$WORKING_DIR"
+
+echo "Push image..."
+docker push "$IMAGE:$TAG"
+docker push "$IMAGE:$SHA"

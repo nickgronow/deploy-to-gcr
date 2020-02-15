@@ -12,7 +12,7 @@ inputs:
   working_directory:
     description: "Directory where the Dockerfile is to be found"
     required: false
-    default: /
+    default: .
   registry:
     description: "GCP Registry (e.g. 'gcr.io')"
     required: false
@@ -21,13 +21,14 @@ inputs:
     description: "GCP project name"
     required: true
   image_name:
-    description: "Image name"
-    required: true
+    description: "Image name. Defaults to repo name if not provided (without github username)"
+    required: false
   image_tag:
     description: "Image tag. Image will also be tagged with commit sha"
     required: false
+    default: latest
 with:
-  service_key: {{ secrets.gcp_service_key }}
+  service_key: {{ secrets.GCP_SERVICE_KEY_JSON }}
 runs:
   using: "docker"
   image: "docker://passionkind/github-action-cloud-run:latest"
