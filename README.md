@@ -1,4 +1,4 @@
-# Github Action for Google Cloud Run
+# Github Action for Cached GCR Docker Image Deployments
 
 An GitHub Action for deploying revisions to Google Cloud Run.
 
