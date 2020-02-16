@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eoux pipefail
 
@@ -36,7 +36,7 @@ if [ "$INPUT_CHECK_IF_CHANGED" ]; then
   fi
 fi
 
-REPO_NAME="$($GITHUB_REPOSITORY | sed 's|^.*/||')"
+REPO_NAME="$(echo $GITHUB_REPOSITORY | sed -e 's|^.*/||')"
 REGISTRY="${INPUT_REGISTRY-gcr.io}"
 PROJECT="$INPUT_PROJECT"
 NAME="${INPUT_IMAGE_NAME-$REPO_NAME}"
