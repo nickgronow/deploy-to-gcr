@@ -8,7 +8,6 @@ RUN apk add --no-cache git
 RUN apk add bash
 
 # Files
-COPY entrypoint.sh /usr/local/bin/entrypoint
-COPY gitdiff.sh /usr/local/bin/gitdiff
+COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["entrypoint"]
+ENTRYPOINT ["/entrypoint.sh"]
