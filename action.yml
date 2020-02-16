@@ -31,4 +31,4 @@ with:
   service_key: {{ secrets.GCP_SERVICE_KEY_JSON }}
 runs:
   using: "docker"
-  image: "docker://passionkind/github-action-cloud-run:latest"
+  image: "docker://nickgronow/deploy-to-gcr:latest"
