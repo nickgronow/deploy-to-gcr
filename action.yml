@@ -30,8 +30,9 @@ inputs:
   build_args:
     description: "Pass a list of env vars as build-args for docker-build, separated by commas"
     required: false
-with:
-  service_key: {{ secrets.GCP_SERVICE_KEY_JSON }}
+  service_key:
+    description: "Your GCP service key with storage admin permission in json format"
+    required: true
 runs:
   using: "docker"
   image: "docker://nickgronow/deploy-to-gcr:latest"
