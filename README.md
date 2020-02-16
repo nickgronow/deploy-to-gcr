@@ -1,13 +1,10 @@
-# Github Action for Cached GCR Docker Image Deployments
+# Github Action - Deploy to GCR
 
-An GitHub Action for deploying revisions to Google Cloud Run.
+An GitHub Action that pulls, builds from cached, then pushes to gcr.
 
 ## Usage
 
-Docker image
-
-In your actions workflow, somewhere after the step that builds
-`gcr.io/<your-project>/<image>`, insert this:
+In your actions workflow, insert this:
 
 ```bash
 - name: Deploy image to GCR
