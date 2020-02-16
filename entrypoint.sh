@@ -28,18 +28,20 @@ echo "Full image name: $IMAGE:$TAG"
 echo "Authenticate docker"
 echo $INPUT_SERVICE_KEY | docker login -u _json_key --password-stdin "https://$REGISTRY"
 
-# Pull image
-echo "Pull image..."
-docker pull "$IMAGE:$TAG"
-
 # Build image
 echo "Build image..."
-docker build \
-  -t "$IMAGE:$TAG" \
-  -t "$IMAGE:$SHA" \
-  --cache-from "$IMAGE:$TAG" \
-  --build-arg commit="$GITHUB_SHA" \
-  "$WORKING_DIR"
+BUILD_PARAMS="--build-arg commit=$GITHUB_SHA"
+if [ ! -z "$INPUT_BUILD_ARGS" ]; then
+  for ARG in $(echo "$INPUT_BUILD_ARGS" | tr ',' '\n'); do
+    BUILD_PARAMS="$BUILD_PARAMS --build-arg ${ARG}"
+  done
+fi
+
+if docker pull "$IMAGE:$TAG" 2>/dev/null; then
+  BUILD_PARAMS="$BUILD_PARAMS --cache-from $IMAGE:$TAG"
+fi
+
+docker build -t "$IMAGE:$TAG" -t "$IMAGE:$SHA" "$BUILD_PARAMS" "$WORKING_DIR"
 
 echo "Push image..."
 docker push "$IMAGE:$TAG"

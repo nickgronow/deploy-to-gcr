@@ -1,5 +1,5 @@
 name: "Update a GCR image based on new file changes"
-description: "Authenticate with gcloud, pull previous build, build using previous build cache, and push image to GCR"
+description: "Authenticate with gcloud, build (using previous build if it can), and push image to GCR"
 author: "Nicholas Gronow <nick@wov.io>"
 branding:
   icon: "arrow-up-circle"
@@ -27,6 +27,9 @@ inputs:
     description: "Image tag. Image will also be tagged with commit sha"
     required: false
     default: latest
+  build_args:
+    description: "Pass a list of env vars as build-args for docker-build, separated by commas"
+    required: false
 with:
   service_key: {{ secrets.GCP_SERVICE_KEY_JSON }}
 runs:
