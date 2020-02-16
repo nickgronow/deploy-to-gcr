@@ -20,7 +20,7 @@ inputs:
   project:
     description: "GCP project name"
     required: true
-  image_name:
+  image:
     description: "Image name. Defaults to repo name if not provided (without github username)"
     required: false
   image_tag:
