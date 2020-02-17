@@ -39,4 +39,4 @@ inputs:
     required: true
 runs:
   using: "docker"
-  image: "docker://nickgronow/deploy-to-gcr:latest"
+  image: "docker://nickgronow/deploy-to-gcr:v1"
