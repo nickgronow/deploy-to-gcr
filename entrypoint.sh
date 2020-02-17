@@ -2,7 +2,7 @@
 
 set -eoux pipefail
 
-WORKING_DIR=${INPUT_WORKING_DIRECTORY-.}
+WORKING_DIR=${INPUT_WORKING_DIRECTORY:-.}
 
 if [ $INPUT_CHECK_IF_CHANGED != false ]; then
   PREVIOUS_COMMIT=$(git rev-parse --short HEAD^ 2> /dev/null)
@@ -37,13 +37,13 @@ if [ $INPUT_CHECK_IF_CHANGED != false ]; then
 fi
 
 REPO_NAME="$(echo $GITHUB_REPOSITORY | sed -e 's|^.*/||')"
-REGISTRY="${INPUT_REGISTRY-gcr.io}"
+REGISTRY="${INPUT_REGISTRY:-gcr.io}"
 PROJECT="$INPUT_PROJECT"
-NAME="${INPUT_IMAGE-$REPO_NAME}"
-TAG="$INPUT_IMAGE_TAG"
+NAME="${INPUT_IMAGE:-$REPO_NAME}"
+TAG="${INPUT_IMAGE_TAG:-latest}"
 SHA="$GITHUB_SHA"
 IMAGE="$REGISTRY/$PROJECT/$NAME"
-DOCKERFILE="$(echo $INPUT_DOCKERFILE | sed -e 's|/$||')/Dockerfile"
+DOCKERFILE="$(echo ${INPUT_DOCKERFILE:-Dockerfile} | sed -e 's|/$||')"
 
 echo "Full image name: $IMAGE:$TAG"
 
