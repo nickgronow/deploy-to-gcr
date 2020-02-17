@@ -4,7 +4,7 @@ set -eoux pipefail
 
 WORKING_DIR=${INPUT_WORKING_DIRECTORY-.}
 
-if [ "$INPUT_CHECK_IF_CHANGED" ]; then
+if [ $INPUT_CHECK_IF_CHANGED != false ]; then
   PREVIOUS_COMMIT=$(git rev-parse --short HEAD^ 2> /dev/null)
   COMMIT=$(git rev-parse --short HEAD 2> /dev/null)
 
