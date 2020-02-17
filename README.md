@@ -75,3 +75,11 @@ The image name will default to the name of your repo, without the user/org name.
     service_key: ${{ secrets.gcp_service_key }}
     image: your-image-name
 ```
+
+### Image tag
+
+WIP
+
+### Docker build arguments
+
+WIP
