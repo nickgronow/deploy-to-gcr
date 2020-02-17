@@ -104,4 +104,19 @@ directory you can specify its path relative to the working directory here.
     dockerfile: path/to/Dockerfile
 ```
 
-WIP
+### Build variables
+
+To pass environmental variables to the docker build command add a string of
+comma-separated values to the `build_args` setting.
+
+```bash
+- name: Deploy image to GCR
+  uses: nickgronow/deploy-to-gcr@v1
+  with:
+    project: [your-gcp-project-id]
+    service_key: ${{ secrets.gcp_service_key }}
+    build_args: "VAR1,VAR2"
+  env:
+    VAR1: foo
+    VAR2: bar
+```
