@@ -16,7 +16,7 @@ inputs:
   dockerfile:
     description: "Path to the dockerfile"
     required: false
-    default: .
+    default: Dockerfile
   registry:
     description: "GCP Registry (e.g. 'gcr.io')"
     required: false

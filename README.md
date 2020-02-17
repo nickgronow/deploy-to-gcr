@@ -36,9 +36,9 @@ by setting the flag to false, like so:
 
 ### Specify a working directory
 
-The working directory determines the context for the docker build.  This setting
-will be passed as the final parameter.  It also determines what directory to look
-for changes.
+The working directory determines the context for the docker build.
+This setting will be passed as the final parameter.
+It also determines what directory to look for changes.
 
 ```bash
 - name: Deploy image to GCR
@@ -78,8 +78,30 @@ The image name will default to the name of your repo, without the user/org name.
 
 ### Image tag
 
-WIP
+The image tag will default to latest.  In addition the commit sha will also be
+added and pushed.
 
-### Docker build arguments
+```bash
+- name: Deploy image to GCR
+  uses: nickgronow/deploy-to-gcr@v1
+  with:
+    project: [your-gcp-project-id]
+    service_key: ${{ secrets.gcp_service_key }}
+    image_tag: your-image-tag
+```
+
+### Dockerfile
+
+If your dockerfile lives in a different directory than the root of the working
+directory you can specify its path relative to the working directory here.
+
+```bash
+- name: Deploy image to GCR
+  uses: nickgronow/deploy-to-gcr@v1
+  with:
+    project: [your-gcp-project-id]
+    service_key: ${{ secrets.gcp_service_key }}
+    dockerfile: path/to/Dockerfile
+```
 
 WIP
