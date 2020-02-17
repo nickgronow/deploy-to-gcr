@@ -10,7 +10,11 @@ inputs:
     required: false
     default: "true"
   working_directory:
-    description: "Directory where the Dockerfile is to be found"
+    description: "Directory we want to perform the build on"
+    required: false
+    default: .
+  dockerfile:
+    description: "Path to the dockerfile"
     required: false
     default: .
   registry:
