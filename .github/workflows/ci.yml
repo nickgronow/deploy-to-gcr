@@ -18,3 +18,4 @@ jobs:
         username: ${{ secrets.docker_username }}
         password: ${{ secrets.docker_password }}
         tags: "latest,v1"
+        cache: true
