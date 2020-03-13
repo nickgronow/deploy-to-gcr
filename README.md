@@ -48,6 +48,9 @@ added and pushed.
 
 ### Check for changes before deploying
 
+NOTE: Github has a built-in way to do this now on git push/pull.  I will link to their
+docs on this soon.  In the meantime, feel free to use this.
+
 By default this action will check for changes in the working directory
 before continuing with the deployment.  You can disable this default behavior
 by setting the flag to false, like so:
