@@ -1,3 +1,5 @@
+![Continuous Integration](https://github.com/nickgronow/deploy-to-gcr/workflows/Continuous%20Integration/badge.svg)
+
 # Github Action - Deploy to GCR
 
 An GitHub Action that pulls, builds from cached, then pushes to gcr.
