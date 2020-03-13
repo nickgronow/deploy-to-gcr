@@ -10,7 +10,7 @@ In your actions workflow, insert this:
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
 ```
 
@@ -27,7 +27,7 @@ The image name will default to the name of your repo, without the user/org name.
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
     image: your-image-name
 ```
@@ -41,7 +41,7 @@ added and pushed.
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
     image_tag: your-image-tag
 ```
@@ -56,7 +56,7 @@ by setting the flag to false, like so:
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
     check_if_changed: false
 ```
@@ -71,7 +71,7 @@ It also determines what directory to look for changes.
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
     working_directory: path/to/dir
 ```
@@ -85,7 +85,7 @@ directory you can specify its path relative to the working directory here.
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
     dockerfile: path/to/Dockerfile
 ```
@@ -99,7 +99,7 @@ comma-separated values to the `build_args` setting.
 - name: Deploy image to GCR
   uses: nickgronow/deploy-to-gcr@v1
   with:
-    project: [your-gcp-project-id]
+    project: your-gcp-project-id
     service_key: ${{ secrets.gcp_service_key }}
     build_args: "VAR1,VAR2"
   env:
